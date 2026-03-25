@@ -1,0 +1,26 @@
+<Solution>
+  <Configurations>
+    <Configuration Name="Debug" />
+    <Configuration Name="Release" />
+  </Configurations>
+  
+  <Platforms>
+    <Platform Name="Any CPU" />
+  </Platforms>
+
+  <Folder Name="/src/" />
+  <Folder Name="/tests/" />
+
+  <Project Path="src/Zoo.Core/Zoo.Core.csproj" 
+         Name="Zoo.Core"
+         Folder="/src/" />
+  
+  <Project Path="src/Zoo.Api/Zoo.Api.csproj"
+         Name="Zoo.Api"
+         Folder="/src/"
+         Configuration="Release" />
+  
+  <Project Path="tests/Zoo.Tests/Zoo.Tests.csproj"
+         Name="Zoo.Tests"
+         Folder="/tests/" />
+</Solution>
