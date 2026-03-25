@@ -1,14 +1,20 @@
-using Zoo.Core;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
+// Add services to the container.
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Register domain services (will be replaced with real DI later)
+builder.Services.AddScoped(typeof(Zoo.Domain.Entities.Animal)); // placeholder
+// ... other services injection would go here
+
 var app = builder.Build();
 
-// Configure middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,30 +22,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// API Endpoints
-var animals = new List<Animal>();
-
-app.MapGet("/api/animals", () => animals);
-
-app.MapGet("/api/animals/{id:guid}", (Guid id) =>
-{
-    var animal = animals.FirstOrDefault(a => a.Id == id);
-    return animal is null ? Results.NotFound() : Results.Ok(animal);
-});
-
-app.MapPost("/api/animals", (Animal animal) =>
-{
-    animals.Add(animal);
-    return Results.Created($"/api/animals/{animal.Id}", animal);
-});
-
-app.MapDelete("/api/animals/{id:guid}", (Guid id) =>
-{
-    var animal = animals.FirstOrDefault(a => a.Id == id);
-    if (animal is null) return Results.NotFound();
-    animals.Remove(animal);
-    return Results.NoContent();
-});
+app.MapControllers();
 
 app.Run();
